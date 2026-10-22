@@ -22,12 +22,12 @@ const userSchema = new mongoose.Schema(
       minlength: [8, 'Password must be at least 8 characters long'],
       maxlength: [72, 'Password must be at most 72 characters long'],
       select: false,
-    },
-    role: {
-      type: String,
-      enum: ['user', 'admin'],
-      default: 'user',
-    },
+    }
+    // role: {
+    //   type: String,
+    //   enum: ['user', 'admin'],
+    //   default: 'user',
+    // },
   },
   { timestamps: true }
 );
