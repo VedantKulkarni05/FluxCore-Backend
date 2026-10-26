@@ -1,5 +1,8 @@
 const userModel = require('../models/user.model')
 const jwt = require('jsonwebtoken')
+const emailService = require('../services/email.service')
+const accountModel = require('../models/account.model')
+
 
 async function userRegister(req, res) {
     try {
@@ -46,6 +49,9 @@ async function userRegister(req, res) {
                 token
             }
         });
+
+        // Send registration email
+        await emailService.sendRegisterationEmail(newUser.email, newUser.name);
     } catch (error) {
         console.error("Registration error:", error);
         res.status(500).json({
@@ -110,6 +116,9 @@ async function userLogin(req, res) {
             maxAge: 3 * 24 * 60 * 60 * 1000
         });
 
+        // Send login notification email
+        await emailService.sendLoginEmail(findUserByEmail.email, findUserByEmail.name);
+
         // Return only safe user details
         return res.status(200).json({
             message: "User logged in successfully",
@@ -123,6 +132,7 @@ async function userLogin(req, res) {
             }
         });
 
+
     } catch (error) {
         console.error("Login error:", error);
 
@@ -132,6 +142,8 @@ async function userLogin(req, res) {
         });
     }
 }
+
+
 
 
 module.exports = { userRegister, userLogin }
